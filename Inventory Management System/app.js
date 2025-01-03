@@ -30,6 +30,8 @@ let btSrcId = document.querySelector('.btn-success');
 let btView = document.querySelector('.btn-secondary');
 let btDel = document.querySelector('.btn-danger');
 
+let form = document.querySelector(`#form1`);
+
 
 
 let tblBody = document.querySelector('tbody');
@@ -105,10 +107,7 @@ async function makeTable(name, id, qty, price) {
     tblRow.append(td4);
 
     tblBody.append(tblRow);
-    name = "";
-    id= ""; 
-    qty = ""; 
-    price = "";
+
 }
 
 
@@ -121,70 +120,88 @@ async function addItem() {
     //     let idx = inventoryItems.length+1;
     // }
 
-    itemAdded.addEventListener('click', async (event) =>{
+    itemAdded.addEventListener('click', async (event) => {
         event.stopPropagation();
+    
         let names = document.querySelector('.d1 input');
         let ids = document.querySelector('.d2 input');
-        let qtys= document.querySelector('.d3 input');
+        let qtys = document.querySelector('.d3 input');
         let prices = document.querySelector('.d4 input');
-        // let status = document.querySelector('.d5 input');
-        // let dates = document.querySelector('.d6 input');
         
-        // inventoryItems.push({ name: names.value, id: ids.value, qty: qtys.value, price: prices.value, status: status.value, date: dates.value });
-        if (names.value != "" && ids.value != "" && qtys.value != "" && prices.value != "") {
-            console.log("inside itemAdded 'if'");
-            
-            inventoryItems.push({ name: names.value, id: ids.value, qty: qtys.value, price: prices.value });
-            // console.log(ids.value);
-            
-            await makeTable(names.value, ids.value, qtys.value, prices.value);
-            
-            // names.value = "";
-            // ids.value = ""; 
-            // qtys.value = ""; 
-            // prices.value = "";
-        }else{
-            console.log("inside itemAdded");
-            alert("Please fill all deatails!!");
+        // Check if all fields are filled
+        if (names.value === "" && ids.value === "" && qtys.value === "" && prices.value === "") {
+            return;
+        }else if (names.value === "" || ids.value === "" || qtys.value === "" || prices.value === "") {
+            console.log("inside isFilled: if");
+            alert("Please fill all details!!");
+            return; // Exit early to prevent further execution
         }
-
-    })
-
-    itemSubmited.addEventListener('click', async (event) =>{
-        event.stopPropagation();
-            let names = document.querySelector('.d1 input');
-            let ids = document.querySelector('.d2 input');
-            let qtys= document.querySelector('.d3 input');
-            let prices = document.querySelector('.d4 input');
-            // let status = document.querySelector('.d5 input');
-            // let dates = document.querySelector('.d6 input');
-            
-            // inventoryItems.push({ name: names.value, id: ids.value, qty: qtys.value, price: prices.value, status: status.value, date: dates.value });
-            if (names.value == "" && ids.value == "" && qtys.value == "" && prices.value == ""){
-                addItemsDiv.classList.add("remove");
-                mainBtnDiv.classList.remove('remove');
-                names.value = "";
-                ids.value = ""; 
-                qtys.value = ""; 
-                prices.value = "";
-            }else if (names.value != "" && ids.value != "" && qtys.value != "" && prices.value != "") {
-                inventoryItems.push({ name: names.value, id: ids.value, qty: qtys.value, price: prices.value });
     
-                makeTable(names.value, ids.value, qtys.value, prices.value);
-                addItemsDiv.classList.add("remove");
-                mainBtnDiv.classList.remove('remove');
-                names.value = "";
-                ids.value = ""; 
-                qtys.value = ""; 
-                prices.value = "";
-            }else{
-                console.log("inside itemSubmited");
-                
-                alert("Please fill all deatails!!")
-            }
-    })
+        console.log("inside itemAdded 'if'");
+        inventoryItems.push({ name: names.value, id: ids.value, qty: qtys.value, price: prices.value });
+        await makeTable(names.value, ids.value, qtys.value, prices.value);
+    
+        // Clear inputs only when successfully added
+        // console.log("inside isFilled: else");
+        names.value = "";
+        ids.value = "";
+        qtys.value = "";
+        prices.value = "";
+    });    
+
+    itemSubmited.addEventListener('click', async (event) => {
+        event.stopPropagation();
+    
+        let names = document.querySelector('.d1 input');
+        let ids = document.querySelector('.d2 input');
+        let qtys = document.querySelector('.d3 input');
+        let prices = document.querySelector('.d4 input');
+        let isFilled = false;
+    
+        if (names.value === "" && ids.value === "" && qtys.value === "" && prices.value === "") {
+            addItemsDiv.classList.add("remove");
+            mainBtnDiv.classList.remove('remove');
+            isFilled = true; // Mark as filled to bypass the error alert
+        } else if (names.value !== "" && ids.value !== "" && qtys.value !== "" && prices.value !== "") {
+            inventoryItems.push({ name: names.value, id: ids.value, qty: qtys.value, price: prices.value });
+            isFilled = true;
+            await makeTable(names.value, ids.value, qtys.value, prices.value);
+            addItemsDiv.classList.add("remove");
+            mainBtnDiv.classList.remove('remove');
+            names.value = "";
+            ids.value = ""; 
+            qtys.value = ""; 
+            prices.value = "";
+        }
+    
+        if (!isFilled) { // Only trigger alert when the condition is genuinely unmet
+            console.log("inside isFilled: if");
+            alert("Please fill all details!!");
+        }
+    });    
 }
 
+async function viewItem() {
+    console.log("inside view");
+    addItemsDiv.classList.remove("remove");
+
+    form.classList.add("remove");
+
+    let tbls = document.querySelector("table");
+    // console.dir(tbls);
+    
+    let td = document.querySelector("table td");
+    
+    if (td != null) {
+        tbls.classList.remove("remove");
+    }else{
+        let nrf = document.querySelector(`.noRecordFound`);
+        nrf.classList.remove('remove');
+    }
+
+    
+
+}
 
 async  function choose() {
     let butt = this;
@@ -193,7 +210,7 @@ async  function choose() {
     mainBtnDiv.classList.add('remove');
 
     if (butt.innerText == "Add new items") {
-        addItem();
+        await addItem();
     }else  if (butt.innerText == "Update item details") {
         updateItem();
     }else if (butt.innerText == "Search items by name") {
@@ -201,16 +218,15 @@ async  function choose() {
     }else  if (butt.innerText == "Search items by ID") {
         searchById();
     }else if (butt.innerText == "View all items") {
-        viewItem();
+        await viewItem();
     }else if (butt.innerText == "Delete items") {
         deleteItem();
     }   
 }
 
-
-
-
 // for (bt of btns) {
 //     bt.addEventListener('click',choose)   
 // }
 btAdd.addEventListener('click',choose);
+btView.addEventListener('click',choose);
+

@@ -149,3 +149,24 @@ form{
     margin-top: 10px;
     margin-bottom: 10px;
 }
+
+.form1{
+    display: none;
+    background: linear-gradient(to bottom, var(--light-bg), white);
+}
+
+.noRecord{
+    background-image: url("NoRecord.png");
+    background-size: cover;
+    height: 70vh;
+    width: 100%;
+    margin: auto;
+    background-position: center;
+    background-blend-mode: color-dodge;
+}
+
+.mainMenu{
+    margin-left: auto;
+    /* margin-right: auto; */
+    width: 57%;
+}

@@ -103,7 +103,7 @@
 
     <!--  add items -->
     <div class="container-md remove" id="addItems">
-        <form class="row g-3">
+        <form class="row g-3" id="form1">
             
             <div class="col-md-6 d1">
               <label for="itmName" class="form-label" id="itmName">Item Name:</label>
@@ -167,7 +167,7 @@
             </div>
             <div class="col-6">
                 <button type="button" class="btn btn-primary itemSubmit">Submit</button>
-              </div>
+            </div>
 
           </form>
           <br>
@@ -184,22 +184,16 @@
             </thead>
             
             <tbody>
-
-              <!-- <tr class="table-secondary">
-                <td>1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-              </tr>
-              <tr class="table-primary">
-                <td scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr> -->
               
             </tbody>
           </table>
+          
+    </div>
+    <div class="noRecordFound remove">
+      <div class="noRecord"></div>
+      <div class="col-6 mainMenu">
+        <button type="button" class="btn btn-primary ">Main Menu</button>
+      </div>
     </div>
     <script src="app.js"></script>
 </body>
